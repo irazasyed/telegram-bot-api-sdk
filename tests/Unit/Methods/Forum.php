@@ -2,6 +2,7 @@
 
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
+uses(\Telegram\Bot\Api::class);
 uses(\Telegram\Bot\Methods\Forum::class);
 test('Chat id have to be specified for create topic', function () {
     $this->expectException(TelegramSDKException::class);
