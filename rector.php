@@ -16,7 +16,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         JsonThrowOnErrorRector::class => [
             __DIR__.'/src/Methods/Update.php',
-            __DIR__.'/src/Methods/Forum.php',
         ],
     ]);
 
