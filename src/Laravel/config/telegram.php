@@ -97,7 +97,7 @@ return [
     | Default: https://api.telegram.org/bot
     |
     */
-    'base_bot_url' => null,
+    'base_bot_url' => env('BASE_BOT_URL', null),
 
     /*
     |--------------------------------------------------------------------------

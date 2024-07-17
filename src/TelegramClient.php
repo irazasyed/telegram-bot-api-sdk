@@ -10,6 +10,7 @@ use Telegram\Bot\HttpClients\HttpClientInterface;
 
 final class TelegramClient
 {
+//    used when config/telegram:base_bot_url is null
     public const BASE_BOT_URL = 'https://api.telegram.org/bot';
 
     private string $fileUrl = '{BASE_BOT_URL}/file/bot{TOKEN}/{FILE_PATH}';
