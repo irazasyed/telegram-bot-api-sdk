@@ -165,6 +165,7 @@ abstract class Command implements CommandInterface
             return [];
         }
 
+
         // Generate the regex needed to search for this pattern
         [$pattern, $arguments] = $this->makeRegexPattern();
 
@@ -206,7 +207,7 @@ abstract class Command implements CommandInterface
         $commandOffsets = $this->allCommandOffsets();
 
         if ($commandOffsets->isEmpty()) {
-            return $this->getUpdate()->getMessage()->text ?? '';
+            return $this->getUpdate()->getText() ?? '';
         }
 
         //Extract the current offset for this command and, if it exists, the offset of the NEXT bot_command entity
@@ -228,7 +229,7 @@ abstract class Command implements CommandInterface
     private function cutTextBetween(Collection $splice): string
     {
         return mb_substr(
-            $this->getUpdate()->getMessage()->text ?? '',
+            $this->getUpdate()->getText() ?? '',
             $splice->first(),
             $splice->last() - $splice->first()
         );
@@ -237,7 +238,7 @@ abstract class Command implements CommandInterface
     private function cutTextFrom(Collection $splice): string
     {
         return mb_substr(
-            $this->getUpdate()->getMessage()->text ?? '',
+            $this->getUpdate()->getText() ?? '',
             $splice->first()
         );
     }
