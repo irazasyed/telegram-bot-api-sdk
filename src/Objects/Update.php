@@ -180,4 +180,16 @@ class Update extends BaseObject
     {
         return (bool) $this->getMessage()->get('entities', collect())->contains('type', 'bot_command');
     }
+
+    public function getText()
+    {
+        return match ($this->detectType()) {
+            'message' => $this->message->text,
+            'edited_message' => $this->editedMessage->text,
+            'channel_post' => $this->channelPost->text,
+            'edited_channel_post' => $this->editedChannelPost->text,
+            'callback_query' => "/callback:::".$this->callbackQuery->data,
+            default => "",
+        };
+    }
 }
