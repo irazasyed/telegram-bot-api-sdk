@@ -142,6 +142,18 @@ class CommandBus extends AnswerBus
      */
     protected function handler(Update $update): Update
     {
+        if ($update->detectType() == "callback_query") {
+            preg_match('/\A(\/callback:::\w*)\s(.*)/', $update->getText(), $command);
+            [$text, $command] = $command;
+            $entity = [
+                'offset' => 0,
+                'length' => strlen($command),
+            ];
+            $this->process($entity, $update);
+
+            return $update;
+        }
+
         $message = $update->getMessage();
 
         if ($message->has('entities')) {
@@ -171,7 +183,7 @@ class CommandBus extends AnswerBus
     private function process(array $entity, Update $update): void
     {
         $command = $this->parseCommand(
-            $update->getMessage()->text,
+            $update->getText(),
             $entity['offset'],
             $entity['length']
         );
