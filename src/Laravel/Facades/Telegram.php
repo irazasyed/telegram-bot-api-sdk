@@ -136,11 +136,6 @@ use Telegram\Bot\BotsManager;
  * @method static \Telegram\Bot\Objects\WebhookInfo getWebhookInfo()
  * @method static \Telegram\Bot\Objects\Update getWebhookUpdate(bool $shouldDispatchEvents = true, ?\Psr\Http\Message\RequestInterface $request = null)
  * @method static bool removeWebhook()
- * @method static \Telegram\Bot\Objects\ForumTopic createForumTopic(array $params)
- * @method static bool editForumTopic(array $params)
- * @method static bool closeForumTopic(array $params)
- * @method static bool reopenForumTopic(array $params)
- * @method static bool deleteForumTopic(array $params)
  *
  * @see \Telegram\Bot\Commands\CommandBus
  *

@@ -127,11 +127,9 @@ class CommandBus extends AnswerBus
         }
 
         // remove leading slash
-        $command = substr(
-            $text,
+        $command = substr($text,
             $offset + 1,
-            $length - 1
-        );
+            $length - 1);
 
         // When in group - Ex: /command@MyBot. Just get the command name.
         return Str::of($command)->explode('@')->first();
@@ -143,24 +141,22 @@ class CommandBus extends AnswerBus
     protected function handler(Update $update): Update
     {
         if ($update->detectType() == "callback_query") {
-            preg_match('/\A(\/callback:::\w*)\s(.*)/', $update->getText(), $command);
+            preg_match('/\A(\/callback:::\w*)\s*(.*)/', $update->getText(), $command);
             [$text, $command] = $command;
             $entity = [
                 'offset' => 0,
-                'length' => strlen($command),
+                'length' => strlen($command)
             ];
             $this->process($entity, $update);
-
             return $update;
         }
 
         $message = $update->getMessage();
 
         if ($message->has('entities')) {
-            $this->parseCommandsIn($message)->each(fn ($entity) => $this->process(
-                $entity instanceof MessageEntity ? $entity->all() : $entity,
-                $update
-            ));
+            $this->parseCommandsIn($message)->each(fn($entity) => $this->process($entity instanceof
+                                                                                 MessageEntity ? $entity->all() : $entity,
+                $update));
         }
 
         return $update;
@@ -171,9 +167,10 @@ class CommandBus extends AnswerBus
      */
     private function parseCommandsIn(Collection $message): Collection
     {
-        return Collection::wrap($message->get('entities'))
-            ->filter(static fn (MessageEntity $entity): bool => $entity->type === 'bot_command');
+        return Collection::wrap($message->get('entities'))->filter(static fn(MessageEntity $entity): bool => $entity->type ===
+                                                                                                             'bot_command');
     }
+
 
     /**
      * Execute a bot command from the update text.
@@ -182,11 +179,9 @@ class CommandBus extends AnswerBus
      */
     private function process(array $entity, Update $update): void
     {
-        $command = $this->parseCommand(
-            $update->getText(),
+        $command = $this->parseCommand($update->getText(),
             $entity['offset'],
-            $entity['length']
-        );
+            $entity['length']);
 
         $this->execute($command, $update, $entity);
     }
@@ -199,10 +194,10 @@ class CommandBus extends AnswerBus
      */
     protected function execute(string $name, Update $update, array $entity): mixed
     {
-        $command = $this->commands[$name]
-            ?? $this->commandAliases[$name]
-            ?? $this->commands['help']
-            ?? collect($this->commands)->first(fn ($command): bool => $command instanceof $name);
+        $command = $this->commands[$name] ?? $this->commandAliases[$name] ?? $this->commands['help'] ??
+                                                                             collect($this->commands)->first(fn($command): bool => $command
+                                                                                                                                   instanceof
+                                                                                                                                   $name);
 
         return $command?->make($this->telegram, $update, $entity) ?? false;
     }
@@ -214,14 +209,10 @@ class CommandBus extends AnswerBus
      */
     private function resolveCommand(CommandInterface|string $command): CommandInterface
     {
-        if (! is_a($command, CommandInterface::class, true)) {
-            throw new TelegramSDKException(
-                sprintf(
-                    'Command class "%s" should be an instance of "%s"',
-                    is_object($command) ? $command::class : $command,
-                    CommandInterface::class
-                )
-            );
+        if (!is_a($command, CommandInterface::class, true)) {
+            throw new TelegramSDKException(sprintf('Command class "%s" should be an instance of "%s"',
+                is_object($command) ? $command::class : $command,
+                CommandInterface::class));
         }
 
         $commandInstance = $this->buildDependencyInjectedClass($command);
@@ -239,23 +230,15 @@ class CommandBus extends AnswerBus
     private function checkForConflicts(CommandInterface $command, string $alias): void
     {
         if (isset($this->commands[$alias])) {
-            throw new TelegramSDKException(
-                sprintf(
-                    '[Error] Alias [%s] conflicts with command name of "%s" try with another name or remove this alias from the list.',
-                    $alias,
-                    $command::class
-                )
-            );
+            throw new TelegramSDKException(sprintf('[Error] Alias [%s] conflicts with command name of "%s" try with another name or remove this alias from the list.',
+                $alias,
+                $command::class));
         }
 
         if (isset($this->commandAliases[$alias])) {
-            throw new TelegramSDKException(
-                sprintf(
-                    '[Error] Alias [%s] conflicts with another command\'s alias list: "%s", try with another name or remove this alias from the list.',
-                    $alias,
-                    $command::class
-                )
-            );
+            throw new TelegramSDKException(sprintf('[Error] Alias [%s] conflicts with another command\'s alias list: "%s", try with another name or remove this alias from the list.',
+                $alias,
+                $command::class));
         }
     }
 }
