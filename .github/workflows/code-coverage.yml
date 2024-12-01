@@ -40,7 +40,7 @@ jobs:
         run: vendor/bin/pest --coverage --coverage-clover build/pest.xml
 
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/pest.xml
