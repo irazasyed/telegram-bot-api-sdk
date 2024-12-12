@@ -172,4 +172,29 @@ trait EditMessage
     {
         return $this->post('deleteMessage', $params)->getResult();
     }
+
+    /**
+     * Delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+     *
+     * <code>
+     * $params = [
+     *       'chat_id'     => '',  // int|string - Required. Unique identifier for the target chat or username of the target channel (in the format "@channelusername")
+     *       'message_ids'  => [],  // int[]     - Required. List of 1-100 identifiers of messages to delete. @see self::deleteMessage() for limitations on which messages can be deleted
+     * ]
+     * </code>
+     *
+     * @link https://core.telegram.org/bots/api#deletemessages
+     *
+     * @return bool
+     *
+     * @throws TelegramSDKException
+     */
+    public function deleteMessages(array $params)
+    {
+        if (isset($params['message_ids'])) {
+            $params['message_ids'] = json_encode($params['message_ids'], JSON_THROW_ON_ERROR);
+        }
+
+        return $this->post('deleteMessages', $params)->getResult();
+    }
 }
