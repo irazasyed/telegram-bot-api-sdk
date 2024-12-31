@@ -262,7 +262,7 @@ trait Http
      *
      * @throws TelegramSDKException
      */
-    protected function post(string $endpoint, array $params = [], bool $fileUpload = false): TelegramResponse
+    public function post(string $endpoint, array $params = [], bool $fileUpload = false): TelegramResponse
     {
         $params = $this->normalizeParams($params, $fileUpload);
 
